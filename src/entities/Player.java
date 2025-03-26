@@ -1,25 +1,20 @@
 package entities;
 import static utilz.Constants.PlayerConstants.*;
-import static utilz.Constants.Directions.*;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
+
+import utilz.LoadSave;
 
 public class Player extends Entity{
 
 	private BufferedImage[][] animations;
-	private int aniTick, aniIndex, aniSpeed = 15;	// 120/12 = 10 animations
+	private int aniTick, aniIndex, aniSpeed = 24;	// 120/24 = 5 animations
 	private int playerAction = IDLE;
 	private boolean moving = false, attacking = false;
 	private boolean left, up, right, down;
-	private float playerSpeed = 2.0f;
-	private int attackCounter = 0; 		// tracks the number of attack clicks
-	private long lastAttackTime = 0; 	// tracks the last attack time
-	private final int comboResetTime = 1000; 	// time in milliseconds to reset the combo
+	private float playerSpeed = 1.0f;
 	private boolean canStartNextAttack = true;  // ensures one attack finishes before next starts
 	
 	public Player(float x, float y) {
@@ -35,7 +30,8 @@ public class Player extends Entity{
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y, 162*2, 162*2, null);
+		//Finn
+		g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y, 32*2, 32*2, null);
 	}
 	
 	private void updatePos() {
@@ -76,54 +72,25 @@ public class Player extends Entity{
 	
 	private void loadAnimations() {
 		
-		InputStream is = getClass().getResourceAsStream("/Assets/Character/FantasyWarrior/sprites.png");
+		//Test Finn
+		BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.FINN_ATLAS);
 		
-		try {
-			BufferedImage img = ImageIO.read(is);
-			
-			animations = new BufferedImage[9][10];
-			for(int j = 0; j < animations.length; j++) {
-				for(int i = 0; i < animations[j].length; i++) {
-					animations[j][i] = img.getSubimage(i*162, j*162, 162, 162);
-				}			
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				is.close();
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
+		animations = new BufferedImage[6][9];
+		for(int j = 0; j < animations.length; j++) {
+			for(int i = 0; i < animations[j].length; i++) {
+				animations[j][i] = img.getSubimage(i*32, j*32, 32, 32);
+			}			
 		}
+		
 	}
 	
 	private void setAnimation() {
 		int startAni = playerAction;
 		
-		if(attacking && canStartNextAttack) {
-			long currentTime = System.currentTimeMillis();
-			
-			// reset combo if it too much time has passed
-			if(currentTime - lastAttackTime > comboResetTime) {
-				attackCounter = 0;
-			}
-			
-			// Increment attackCounter and set the appropriate attack animation
-			attackCounter = (attackCounter % 3) +1;
-			if(attackCounter == 1) {
-				playerAction = ATTACK_1;
-			}else if(attackCounter == 2) {
-				playerAction = ATTACK_2;
-			} else {
-				playerAction = ATTACK_3;
-			}
-			
-			
-			lastAttackTime = currentTime;
-			canStartNextAttack = false; // prevent starting next attack until this one finishes
+		//Finn
+		if(attacking) {
+			playerAction = ATTACK_1;
 		}
-		
 		else if(!attacking) {
 			if(moving) {
 				playerAction = RUNNING;
