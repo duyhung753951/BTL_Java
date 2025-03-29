@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import gameState.Gamestate;
 import main.GamePanel;
 
 public class MouseInputs implements MouseListener, MouseMotionListener{
@@ -17,32 +18,74 @@ public class MouseInputs implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		switch (Gamestate.state) {
+		case PLAYING:
+			gamePanel.getGame().getPlaying().mouseDragged(e);
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		switch(Gamestate.state) {
+		case MENU:
+			gamePanel.getGame().getMenu().mousedMoved(e);
+			break;
+		case PLAYING:
+			gamePanel.getGame().getPlaying().mousedMoved(e);
+			break;
+		default:
+			break;
 		
+		}
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1) {	//button 1 is left mouse
-			gamePanel.getGame().getPlayer().setAttacking(true);
+		switch(Gamestate.state) {
+		
+		case PLAYING:
+			gamePanel.getGame().getPlaying().mouseClicked(e);
+			break;
+		default:
+			break;
+		
 		}
 		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		switch(Gamestate.state) {
+		case MENU:
+			gamePanel.getGame().getMenu().mousePressed(e);
+			break;
+		case PLAYING:
+			gamePanel.getGame().getPlaying().mousePressed(e);
+			break;
+		default:
+			break;
+		
+		}
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		switch(Gamestate.state) {
+		case MENU:
+			gamePanel.getGame().getMenu().mouseReleased(e);
+			break;
+		case PLAYING:
+			gamePanel.getGame().getPlaying().mouseReleased(e);
+			break;
+		default:
+			break;
+		
+		}
 		
 	}
 
