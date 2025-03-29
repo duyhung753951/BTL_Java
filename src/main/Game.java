@@ -1,9 +1,12 @@
 package main;
 
 import java.awt.Graphics;
+import java.awt.Menu;
 
-import entities.Player;
-import levels.LevelManager;
+
+
+import gameState.*;
+
 
 public class Game implements Runnable{
 	private GameWindow gameWindow;
@@ -12,8 +15,8 @@ public class Game implements Runnable{
 	private final int FPS_SET = 120;	// frame rate: xu li hinh anh cua game
 	private final int UPS_SET = 200;	// Tick rate: xu li mat logic, su kien cua game
 	
-	private Player player;
-	private LevelManager levelManager;
+	private Playing playing;
+	 private gameState.Menu menu;
 	
 	
 	public static final int TILES_DEFAULT_SIZE = 32;
@@ -34,8 +37,8 @@ public class Game implements Runnable{
 	}
 	
 	private void initClasses() {
-		player = new Player(200, 200);
-		levelManager = new LevelManager(this);
+	menu = new gameState.Menu(this);
+	playing = new Playing(this);
 		
 	}
 
@@ -45,13 +48,36 @@ public class Game implements Runnable{
 	}
 	
 	public void update() {
-		player.update();
-		levelManager.update();
+		
+		switch(Gamestate.state) {
+		case MENU:
+			menu.update();
+			break;
+		case PLAYING:
+			playing.update();
+			break;
+		case OPTION:
+		case QUIT:
+		default: 
+			System.exit(0);
+			break;
+		
+		}
 	}
 	
 	public void render(Graphics g) {
-		levelManager.draw(g);
-		player.render(g);
+		
+		switch(Gamestate.state) {
+		case MENU:
+			menu.draw(g);
+			break;
+		case PLAYING:
+			playing.draw(g);
+			break;
+		default:
+			break;
+		
+		}
 	}
 
 	@Override
@@ -103,13 +129,19 @@ public class Game implements Runnable{
 	}
 	
 	public void windowFocusLost() {
-		player.resetDirBoolean();	// reset moving boolean to false
+			if (Gamestate.state== Gamestate.PLAYING) {
+				playing.getPlayer().resetDirBoolean();;
+
+			}
 		
 	}
-	
-	public Player getPlayer() {
-		return player;
+	public gameState.Menu getMenu() {
+		return menu;
 	}
+	public Playing getPlaying() {
+		return playing;
+	}
+	
 
 	
 }
