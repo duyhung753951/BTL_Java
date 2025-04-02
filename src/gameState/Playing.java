@@ -9,6 +9,8 @@ import levels.LevelManager;
 import main.Game;
 import ui.PauseOverlay;
 
+import static main.Game.SCALE;
+
 public class Playing extends State implements Statemethods{
 	private Player player;
 	private LevelManager levelManager;
@@ -22,8 +24,9 @@ public class Playing extends State implements Statemethods{
 	
 	
 	private void initClasses() {
-		player = new Player(200, 200);
 		levelManager = new LevelManager(game);
+		player = new Player(200, 180, (int) (32*SCALE), (int) (32*SCALE));
+		player.loadLvData(levelManager.getCurrentLevel().getLvData());
 		pauseOverlay=new PauseOverlay(this);
 		
 	}
@@ -96,7 +99,7 @@ public class Playing extends State implements Statemethods{
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			player.setUp(true);
+			player.setJump(true);
 			break;
 		case KeyEvent.VK_A:
 			player.setLeft(true);
@@ -106,6 +109,9 @@ public class Playing extends State implements Statemethods{
 			break;
 		case KeyEvent.VK_D:
 			player.setRight(true);
+			break;
+		case KeyEvent.VK_SPACE:
+			player.setJump(true);
 			break;
 		case KeyEvent.VK_ESCAPE:
 			paused=!paused;
@@ -119,7 +125,7 @@ public class Playing extends State implements Statemethods{
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			player.setUp(false);
+			player.setJump(false);
 			break;
 		case KeyEvent.VK_A:
 			player.setLeft(false);
@@ -129,6 +135,9 @@ public class Playing extends State implements Statemethods{
 			break;
 		case KeyEvent.VK_D:
 			player.setRight(false);
+			break;
+		case KeyEvent.VK_SPACE:
+			player.setJump(false);
 			break;
 		}
 		
