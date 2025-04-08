@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 public class PauseButton {
 	 protected int x,y,width,height;
 	 protected Rectangle bounds;
+
 	 public PauseButton(int x, int y, int w, int h) {
 		 this.x=x;
 		 this.y=y;

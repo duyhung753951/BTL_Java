@@ -8,7 +8,7 @@ import java.awt.Menu;
 import gameState.*;
 
 
-public class Game implements Runnable{
+public class Game implements Runnable {
 	private GameWindow gameWindow;
 	private GamePanel gamePanel;
 	private Thread gameThread;
@@ -16,7 +16,7 @@ public class Game implements Runnable{
 	private final int UPS_SET = 200;	// Tick rate: xu li mat logic, su kien cua game
 	
 	private Playing playing;
-	 private gameState.Menu menu;
+	private gameState.Menu menu;
 	
 	
 	public static final int TILES_DEFAULT_SIZE = 32;
@@ -37,9 +37,8 @@ public class Game implements Runnable{
 	}
 	
 	private void initClasses() {
-	menu = new gameState.Menu(this);
-	playing = new Playing(this);
-		
+		menu = new gameState.Menu(this);
+		playing = new Playing(this);
 	}
 
 	private void startGameLoop() {
@@ -48,7 +47,6 @@ public class Game implements Runnable{
 	}
 	
 	public void update() {
-		
 		switch(Gamestate.state) {
 		case MENU:
 			menu.update();
@@ -61,7 +59,6 @@ public class Game implements Runnable{
 		default: 
 			System.exit(0);
 			break;
-		
 		}
 	}
 	
@@ -82,7 +79,6 @@ public class Game implements Runnable{
 
 	@Override
 	public void run() {
-		
 		double timePerFrame = 1000000000.0 / FPS_SET;	// 1 000 000 000 nanoSecond = 1 Second
 		double timePerUpdate = 1000000000.0 / UPS_SET;
 		
@@ -118,7 +114,6 @@ public class Game implements Runnable{
 				deltaF--;
 			}
 			
-			
 			if(System.currentTimeMillis() - lastCheck >= 1000) {
 				lastCheck = System.currentTimeMillis();
 				System.out.println("FPS: " + frames + " | UPS: " + updates);
@@ -129,19 +124,17 @@ public class Game implements Runnable{
 	}
 	
 	public void windowFocusLost() {
-			if (Gamestate.state== Gamestate.PLAYING) {
-				playing.getPlayer().resetDirBoolean();;
+		if (Gamestate.state== Gamestate.PLAYING) {
+			playing.getPlayer().resetDirBoolean();;
 
-			}
-		
+		}
 	}
+
 	public gameState.Menu getMenu() {
 		return menu;
 	}
+
 	public Playing getPlaying() {
 		return playing;
 	}
-	
-
-	
 }

@@ -8,12 +8,14 @@ import java.awt.image.BufferedImage;
 
 import utilz.LoadSave;
 import static utilz.Constants.UI.VolumeButtons.*;
+
 public class VolumeButton extends PauseButton{
 	private BufferedImage[] imgs;
 	private BufferedImage slider;
 	private boolean mouseOver,mousePressed;
-		private int index=0;
-		private int buttonX,minX, maxX;
+	private int index=0;
+	private int buttonX,minX, maxX;
+
 	public VolumeButton(int x, int y, int w, int h) {
 		super(x+w/2, y, VOLUME_WIDTH, h);
 		bounds.x-=VOLUME_WIDTH/2;

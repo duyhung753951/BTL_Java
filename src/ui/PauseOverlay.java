@@ -13,6 +13,7 @@ import utilz.LoadSave;
 import static utilz.Constants.UI.PauseButtons.*;
 import static utilz.Constants.UI.URMButtons.*;
 import static utilz.Constants.UI.VolumeButtons.*;
+
 public class PauseOverlay {
 	private Playing playing;
 	private BufferedImage backgroundImg;
@@ -123,13 +124,12 @@ public class PauseOverlay {
 			playing.unpauseGame();
 	    }		
 		
-			
-			musicButton.resetBools();
-			sfxButton.resetBools();
-			menuB.resetBools();
-			replayB.resetBools();
-			unpauseB.resetBools();
-			volumeButton.resetBools();
+		musicButton.resetBools();
+		sfxButton.resetBools();
+		menuB.resetBools();
+		replayB.resetBools();
+		unpauseB.resetBools();
+		volumeButton.resetBools();
 	}
 
 	public void mousedMoved(MouseEvent e) {
@@ -139,23 +139,22 @@ public class PauseOverlay {
 		musicButton.setMouseOver(false);
 		sfxButton.setMouseOver(false);
 		if (isIn(e, musicButton)) {
-			musicButton.setMouseOver(true);				
-			
+			musicButton.setMouseOver(true);
 		}else if (isIn(e, sfxButton)) {
-		sfxButton.setMouseOver(true);
-		}else if (isIn(e, menuB)){
-			menuB.setMouseOver(true);
-			}else if (isIn(e, unpauseB)) {
-				unpauseB.setMouseOver(true);
-			}else if (isIn(e, replayB)) {
-				replayB.setMouseOver(true);
-			}else if (isIn(e, volumeButton))
-				volumeButton.setMouseOver(true);
-		
-		
-			
-			
+			sfxButton.setMouseOver(true);
 		}
+		else if (isIn(e, menuB)){
+			menuB.setMouseOver(true);
+		}
+		else if (isIn(e, unpauseB)) {
+			unpauseB.setMouseOver(true);
+		}
+		else if (isIn(e, replayB)) {
+			replayB.setMouseOver(true);
+		}
+		else if (isIn(e, volumeButton))
+			volumeButton.setMouseOver(true);
+	}
 		
 	
 	private boolean isIn(MouseEvent e,PauseButton b) {

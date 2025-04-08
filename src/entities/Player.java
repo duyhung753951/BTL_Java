@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 import utilz.LoadSave;
 
-public class Player extends Entity{
+public class Player extends Entity {
 
 	private BufferedImage[][] animations;
 	private int aniTick, aniIndex, aniSpeed = 24;	// 120/24 = 5 animations
