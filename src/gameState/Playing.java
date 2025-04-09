@@ -18,7 +18,8 @@ public class Playing extends State implements Statemethods {
 	private LevelManager levelManager;
 	private boolean paused=false;
 	private PauseOverlay pauseOverlay;
-	
+
+
 	public Playing(Game game) {
 		super(game);
 		initClasses();

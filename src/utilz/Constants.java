@@ -15,7 +15,7 @@ public class Constants {
 		public static final int LAND = 5;
 		public static final int RUNNING = 6;
 
-		public static final int FIERCETOOTH_WIDTH_DEFAULT = 30;
+		public static final int FIERCETOOTH_WIDTH_DEFAULT = 32;
 		public static final int FIERCETOOTH_HEIGHT_DEFAULT = 27;
 
 		public static final int FIERCETOOTH_WIDTH = (int) (FIERCETOOTH_WIDTH_DEFAULT * Game.SCALE);
@@ -42,7 +42,7 @@ public class Constants {
 							return 1;
 					}
 			}
-		return 0;
+			return 0;
 		}
 	}
 
