@@ -29,7 +29,9 @@ public class HelpMethods {
      * @return Trả về true nếu ô đó là vật cản.
      */
     private static boolean IsSolid(float x, float y, int [][] lvData){
-        if (x < 0 || x >= Game.GAME_WIDTH || y < 0 || y >= Game.GAME_HEIGHT)    // check x, y có vượt ngoài phạm vi game
+        int maxWidth = lvData[0].length * Game.TILES_SIZE;
+
+        if (x < 0 || x >= maxWidth || y < 0 || y >= Game.GAME_HEIGHT)    // check x, y có vượt ngoài phạm vi game
             return true;
 
         float xIndex = x / Game.TILES_SIZE;     // tọa độ x trong mảng level data

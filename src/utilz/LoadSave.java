@@ -11,10 +11,11 @@ import main.Game;
 
 public class LoadSave {
 
-//	public static final String PLAYER_ATLAS = "Assets/Character/FantasyWarrior/sprites.png";
+
 	public static final String FINN_ATLAS = "Assets/Character/FinnSprites.png";
 	public static final String LEVEL_ATLAS = "Assets/Levels/outside_sprites.png";
-	public static final String LEVEL_1_DATA = "Assets/Levels/level_one_data.png";
+//	public static final String LEVEL_1_DATA = "Assets/Levels/level_one_data.png";
+	public static final String LEVEL_1_DATA = "Assets/Levels/level_one_data_long.png";
 	public static final String MENU_BUTTONS = "Assets/Menu/button_atlas.png";
 	public static final String MENU_BACKGROUND = "Assets/Menu/menu_background.png";
 	public static final String PAUSE_BACKGROUND = "Assets/Menu/pause_menu.png";
@@ -46,9 +47,9 @@ public class LoadSave {
 	}
 	
 	public static int[][] GetLevelData(){
-		int[][] lvData = new int[Game.TILES_IN_HEIGHT][Game.TILES_IN_WIDTH];
+
 		BufferedImage img = GetSpriteAtlas(LEVEL_1_DATA);
-		
+		int[][] lvData = new int[img.getHeight()][img.getWidth()];
 		for(int j = 0; j < img.getHeight(); j++){
 			for(int i = 0; i < img.getWidth(); i++){
 				Color color = new Color(img.getRGB(i, j));

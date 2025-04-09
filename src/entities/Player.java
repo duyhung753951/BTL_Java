@@ -39,9 +39,9 @@ public class Player extends Entity{
 		setAnimation();			// check moving ? running : idle
 	}
 	
-	public void render(Graphics g) {
+	public void render(Graphics g, int lvlOffset) {
 		//Finn
-		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset), (int)(hitbox.y - yDrawOffset), 32*2, 32*2, null);
+		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - lvlOffset, (int)(hitbox.y - yDrawOffset), 32*2, 32*2, null);
 //		drawHitBox(g);
 	}
 	

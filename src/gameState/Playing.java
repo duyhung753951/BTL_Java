@@ -8,6 +8,7 @@ import entities.Player;
 import levels.LevelManager;
 import main.Game;
 import ui.PauseOverlay;
+import utilz.LoadSave;
 
 import static main.Game.SCALE;
 
@@ -16,7 +17,17 @@ public class Playing extends State implements Statemethods{
 	private LevelManager levelManager;
 	private boolean paused=false;
 	private PauseOverlay pauseOverlay;
-	
+
+	private int xLvlOffset;
+	/*
+	chia doi ranh gioi trai va phai 5:5 de giu nvat o giua man hinh
+	*/
+	private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
+	private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
+	private int lvlTilesWide = LoadSave.GetLevelData()[0].length;		// chieu rong tiles cua level
+	private int maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;	// so luong tiles du ra man hinh (phan co the cuon)
+	private int maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE;		// maxTilesOffset theo pixel
+
 	public Playing(Game game) {
 		super(game);
 		initClasses();
@@ -38,6 +49,7 @@ public class Playing extends State implements Statemethods{
 		if (!paused) {
 			levelManager.update();
 			player.update();
+			checkCloseToBorder();
 		}else {
 			pauseOverlay.update();
 		}
@@ -46,11 +58,27 @@ public class Playing extends State implements Statemethods{
 		
 	}
 
+	private void checkCloseToBorder() {
+		int playerX = (int) player.getHitBox().x;
+		int diff = playerX - xLvlOffset;
+
+		if (diff > leftBorder) {
+			xLvlOffset += diff - rightBorder;
+		}else if (diff < leftBorder) {
+			xLvlOffset += diff - leftBorder;
+		}
+		if(xLvlOffset > maxLvlOffsetX){
+			xLvlOffset = maxLvlOffsetX;
+		}else if(xLvlOffset < 0){
+			xLvlOffset = 0;
+		}
+	}
+
 
 	@Override
 	public void draw(Graphics g) {
-		levelManager.draw(g);
-		player.render(g);
+		levelManager.draw(g, xLvlOffset);
+		player.render(g, xLvlOffset);
 		if (paused) {
 			pauseOverlay.draw(g);
 		}
