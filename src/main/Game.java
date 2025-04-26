@@ -16,7 +16,7 @@ public class Game implements Runnable{
 	private final int UPS_SET = 200;	// Tick rate: xu li mat logic, su kien cua game
 	
 	private Playing playing;
-	 private gameState.Menu menu;
+	private gameState.Menu menu;
 	
 	
 	public static final int TILES_DEFAULT_SIZE = 32;
@@ -130,7 +130,7 @@ public class Game implements Runnable{
 	
 	public void windowFocusLost() {
 			if (Gamestate.state== Gamestate.PLAYING) {
-				playing.getPlayer().resetDirBoolean();;
+				playing.getPlayer().resetDirBooleans();;
 
 			}
 		
