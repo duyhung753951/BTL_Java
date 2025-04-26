@@ -3,7 +3,7 @@ package ui;
 import static utilz.Constants.UI.URMButtons.URM_DEFAULT_SIZE;
 import static utilz.Constants.UI.URMButtons.URM_SIZE;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import utilz.LoadSave;
@@ -15,16 +15,25 @@ public class VolumeButton extends PauseButton{
 		private int index=0;
 		private int buttonX,minX, maxX;
 	public VolumeButton(int x, int y, int w, int h) {
-		super(x+w/2, y, VOLUME_WIDTH, h);
-		bounds.x-=VOLUME_WIDTH/2;
-		buttonX=x+width/2;
-		this.x=x;
-		this.width=w;
+		super(x, y, w, h); // Gọi PauseButton với toàn bộ thanh slider
+
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+
+		buttonX = x + width / 2; // Khởi tạo ở giữa slider
+
+		// Giới hạn kéo: không để nút ra khỏi slider
 		minX = x + VOLUME_WIDTH / 2;
 		maxX = x + width - VOLUME_WIDTH / 2;
+
+		// Tạo lại vùng bounds đúng với nút
+		bounds = new Rectangle(buttonX - VOLUME_WIDTH / 2, y, VOLUME_WIDTH, h);
+
 		loadImgs();
-		
 	}
+
 	private void loadImgs() {
 	BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.VOLUME_BUTTONS);
 	imgs= new BufferedImage[3];
@@ -33,19 +42,20 @@ public class VolumeButton extends PauseButton{
 	}
 	slider=temp.getSubimage(3*VOLUME_DEFAULT_WIDTH, 0, SLIDER_DEFAULT_WIDTH, VOLUME_DEFAULT_HEIGHT);
 	}
-	
+
 	public void update() {
-	index =0;
-	if(mouseOver) {
-		index=1;
+		index = 0; // mặc định trạng thái bình thường
+		if (mousePressed) {
+			index = 2; // ưu tiên cao nhất khi đang nhấn
+		} else if (mouseOver) {
+			index = 1; // chỉ hover nếu không nhấn
+		}
+
 	}
-	if(mousePressed) {
-		index=2;
-	}
-	}
+
 	public void draw(Graphics g) {
 	g.drawImage(slider, x,y, width, height, null);
-	g.drawImage(imgs[index], buttonX, y, VOLUME_WIDTH,height, null);
+	g.drawImage(imgs[index], buttonX-VOLUME_WIDTH/2, y, VOLUME_WIDTH,height, null);
 	
 	}
 	public void resetBools() {
@@ -53,16 +63,16 @@ public class VolumeButton extends PauseButton{
 		mousePressed=false;
 	}
 	public void changeX(int x) {
-		if (x < minX)
-			buttonX = minX;
-		else if (x > maxX)
-			buttonX = maxX;
-		else
+		if (x - VOLUME_WIDTH / 2 < this.x) {
+			buttonX = this.x + VOLUME_WIDTH / 2;
+		} else if (x + VOLUME_WIDTH / 2 > this.x + width) {
+			buttonX = this.x + width - VOLUME_WIDTH / 2;
+		} else {
 			buttonX = x;
-
+		}
 		bounds.x = buttonX - VOLUME_WIDTH / 2;
-
 	}
+
 	public boolean isMouseOver() {
 		return mouseOver;
 	}

@@ -1,4 +1,8 @@
 package entities;
+import static gameState.Gamestate.state;
+import static utilz.Constants.ANI_SPEED;
+import static utilz.Constants.EnemyConstants.DEAD;
+import static utilz.Constants.EnemyConstants.GetSpriteAmount;
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
 
@@ -72,18 +76,34 @@ public class Player extends Entity{
 		updateHealthBar();
 
 		if (currentHealth <= 0) {
-			playing.setGameOver(true);
+			playing.setPlayerDying(true); // Chỉ set dying, chưa game over liền
+
+			// Nếu chưa ở trạng thái DEATH animation
+			if (playerAction != DEATH) {
+				playerAction = DEATH; // Đổi playerAction sang animation chết
+				aniTick = 0;
+				aniIndex = 0;
+			} else {
+				// Nếu animation chết đã chơi xong
+				if (aniIndex >= getSpriteAmount(DEATH) - 1 && aniTick >= aniSpeed - 1) {
+					playing.setGameOver(true); // Thực sự GameOver
+				} else {
+					updateAnimationTick(); // Tiếp tục chơi animation chết
+				}
+			}
+
 			return;
 		}
 
+		// Nếu chưa chết thì chơi bình thường
 		updateAttackBox();
-
-		updatePos();			// set moving
+		updatePos();
 		if (attacking)
 			checkAttack();
-		updateAnimationTick();	// set animation tick
-		setAnimation();			// check moving ? running : idle
+		updateAnimationTick();
+		setAnimation();
 	}
+
 
 	public void render(Graphics g, int lvlOffset) {
 		//Finn

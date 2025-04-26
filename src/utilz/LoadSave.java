@@ -29,8 +29,10 @@ public class LoadSave {
 	public static final String SMALL_CLOUDS = "Assets/Levels/small_clouds.png";
 	public static final String CRABBY_SPRITE = "Assets/Monsters/Crabby/crabby_sprite.png";
 	public static final String STATUS_BAR = "Assets/Menu/health_power_bar.png";
-	
-	
+	public static final String DEATH_SCREEN = "Assets/Menu/death_screen.png";
+	public static final String OPTIONS_MENU = "Assets/Menu/options_background.png";
+	public static final String MENU_BACKGROUND_IMG = "Assets/Menu/menu_background_img1.jpg";
+	public static final String MENU_BACKGROUND_IMG2 = "Assets/Menu/menu_background_img.jpg";
 	public static BufferedImage GetSpriteAtlas(String fileName) {
 		BufferedImage img = null;
 		InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);

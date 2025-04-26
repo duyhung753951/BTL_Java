@@ -22,11 +22,11 @@ public class UrmButton extends PauseButton{
 		}
 	}
 	public void update() {
-		index=0;
-		if (mouseOver) {
-			index=1;
-		}else if (mousePressed) {
-			index=2;
+		index = 0; // mặc định trạng thái bình thường
+		if (mousePressed) {
+			index = 2; // ưu tiên cao nhất khi đang nhấn
+		} else if (mouseOver) {
+			index = 1; // chỉ hover nếu không nhấn
 		}
 		
 	}

@@ -41,7 +41,7 @@ public class Playing extends State implements Statemethods{
 	private Random rand = new Random();
 
 	private boolean gameOver;
-
+	private boolean playerDying;
 	public Playing(Game game) {
 		super(game);
 		initClasses();
@@ -75,6 +75,12 @@ public class Playing extends State implements Statemethods{
 			checkCloseToBorder();
 		}else {
 			pauseOverlay.update();
+		}
+		if (gameOver) {
+			gameOverOverlay.update();
+
+		}else if (playerDying) {
+			player.update();
 		}
 		
 		
@@ -126,6 +132,7 @@ public class Playing extends State implements Statemethods{
 
 	//Hoang
 	public void resetAll() {
+		playerDying = false;
 		gameOver = false;
 		paused = false;
 		player.resetAll();
@@ -151,24 +158,35 @@ public class Playing extends State implements Statemethods{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (!gameOver)
+		if (!gameOver) {
 			if (paused)
 				pauseOverlay.mousePressed(e);
+
+		}else {
+			gameOverOverlay.mousePressed(e);
+		}
 	}
 
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (!gameOver)
+		if (!gameOver) {
 			if (paused)
 				pauseOverlay.mouseReleased(e);
+		}else {
+			gameOverOverlay.mouseReleased(e);
+		}
+
 	}
 
 	@Override
 	public void mousedMoved(MouseEvent e) {
-		if (!gameOver)
+		if (!gameOver) {
 			if (paused)
 				pauseOverlay.mousedMoved(e);
+		}else {
+			gameOverOverlay.mouseMoved(e);
+		}
 	}
 
 	@Override
@@ -222,4 +240,9 @@ public class Playing extends State implements Statemethods{
 	public Player getPlayer() {
 		return player;
 	}
+	public void setPlayerDying(boolean playerDying) {
+		this.playerDying = playerDying;
+
+	}
+
 }
