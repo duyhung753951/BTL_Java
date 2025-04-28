@@ -30,12 +30,17 @@ public class HelpMethods {
      */
     public static boolean IsSolid(float x, float y, int[][] lvData){
         int maxWidth = lvData[0].length * Game.TILES_SIZE;
+        int maxHeight = lvData.length * Game.TILES_SIZE;
 
-        if (x < 0 || x >= maxWidth || y < 0 || y >= Game.GAME_HEIGHT)    // check x, y có vượt ngoài phạm vi game
+        if (x < 0 || x >= maxWidth || y < 0 || y >= maxHeight)    // check x, y có vượt ngoài phạm vi game
             return true;
 
         float xIndex = x / Game.TILES_SIZE;     // tọa độ x trong mảng level data
         float yIndex = y / Game.TILES_SIZE;     // tọa độ y
+
+        // Additional bounds check to avoid ArrayIndexOutOfBoundsException
+        if (yIndex >= lvData.length || xIndex >= lvData[0].length)
+            return true;
 
         int value = lvData[(int) yIndex][(int) xIndex]; // lấy giá trị
 

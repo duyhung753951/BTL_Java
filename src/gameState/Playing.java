@@ -27,14 +27,21 @@ public class Playing extends State implements Statemethods{
 	private GameOverOverlay gameOverOverlay;
 
 	private int xLvlOffset;
+	private int yLvlOffset;
 	/*
 	chia doi ranh gioi trai va phai 5:5 de giu nvat o giua man hinh
 	*/
-	private final int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
-	private final int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+	private final int leftBorder = (int) (0.3 * Game.GAME_WIDTH);
+	private final int rightBorder = (int) (0.7 * Game.GAME_WIDTH);
 	private final int lvlTilesWide = LoadSave.GetLevelData()[0].length;		// chieu rong tiles cua level
 	private final int maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;	// so luong tiles du ra man hinh (phan co the cuon)
 	private final int maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE;		// maxTilesOffset theo pixel
+
+	private final int upBorder = (int) (0.2* Game.GAME_HEIGHT);
+	private final int downBorder = (int) (0.6 * Game.GAME_HEIGHT);
+	private final int lvlTilesLength = LoadSave.GetLevelData().length;		// chieu dai tiles cua level
+	private final int maxTilesOffsetY = lvlTilesLength - Game.TILES_IN_HEIGHT;	// so luong tiles du ra man hinh (phan co the cuon)
+	private final int maxLvlOffsetY = maxTilesOffsetY * Game.TILES_SIZE;
 
 	private BufferedImage backgroundImg, bigCloudImg, smallCloudImg;
 	private int[] smallCloudsPos;
@@ -53,8 +60,8 @@ public class Playing extends State implements Statemethods{
 			smallCloudsPos[i] = (int)(70 * Game.SCALE) + rand.nextInt((int) (100 * Game.SCALE));
 		}
 	}
-	
-	
+
+
 	private void initClasses() {
 		levelManager = new LevelManager(game);
 		enemyManager = new EnemyManager(this);
@@ -63,7 +70,7 @@ public class Playing extends State implements Statemethods{
 		pauseOverlay=new PauseOverlay(this);
 		gameOverOverlay = new GameOverOverlay(this);
 	}
-	
+
 
 
 	@Override
@@ -82,24 +89,37 @@ public class Playing extends State implements Statemethods{
 		}else if (playerDying) {
 			player.update();
 		}
-		
-		
-		
+
+
+
 	}
 
 	private void checkCloseToBorder() {
 		int playerX = (int) player.getHitBox().x;
-		int diff = playerX - xLvlOffset; // vị trí hiện tại của player trên màn hình (luôn được đảm bảo nằm trong các border)
+		int playerY = (int) player.getHitBox().y;
+		int diffX = playerX - xLvlOffset; // vị trí hiện tại của player trên màn hình (luôn được đảm bảo nằm trong các border)
+		int diffY = playerY - yLvlOffset;
 
-		if (diff > rightBorder) {
-			xLvlOffset += (diff - rightBorder);
-		}else if (diff < leftBorder) {
-			xLvlOffset += (diff - leftBorder);
+		if (diffX > rightBorder) {
+			xLvlOffset += (diffX - rightBorder);
+		}else if (diffX < leftBorder) {
+			xLvlOffset += (diffX - leftBorder);
 		}
 		if(xLvlOffset > maxLvlOffsetX){
 			xLvlOffset = maxLvlOffsetX;
 		}else if(xLvlOffset < 0){
 			xLvlOffset = 0;
+		}
+
+		if(diffY > downBorder){
+			yLvlOffset += (diffY - downBorder);
+		}else if(diffY < upBorder){
+			yLvlOffset += (diffY - upBorder);
+		}
+		if(yLvlOffset > maxLvlOffsetY){
+			yLvlOffset = maxLvlOffsetY;
+		}else if(yLvlOffset < 0){
+			yLvlOffset = 0;
 		}
 	}
 
@@ -108,25 +128,26 @@ public class Playing extends State implements Statemethods{
 	public void draw(Graphics g) {
 		g.drawImage(backgroundImg,0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 		drawClouds(g);
-		levelManager.draw(g, xLvlOffset);
-		player.render(g, xLvlOffset);
-		enemyManager.draw(g, xLvlOffset);
+		levelManager.draw(g, xLvlOffset, yLvlOffset);
+		player.render(g, xLvlOffset, yLvlOffset);
+		enemyManager.draw(g, xLvlOffset, yLvlOffset);
 		if (paused) {
 			g.setColor(new Color(0, 0, 0, 150));
 			g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 			pauseOverlay.draw(g);
 		} else if (gameOver)
 			gameOverOverlay.draw(g);
-		
-		
+
+
 	}
 
+	// EDITED
 	private void drawClouds(Graphics g) {
-		for(int i = 0; i < 5; i++){
-			g.drawImage(bigCloudImg,0+i*BIG_CLOUD_WIDTH - (int)(xLvlOffset * 0.3),(int)(204 * SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+		for (int i = 0; i < 5; i++) {
+			g.drawImage(bigCloudImg, i * BIG_CLOUD_WIDTH - (int) (xLvlOffset * 0.3), (int) (204 * SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
 		}
-		for(int i = 0; i < 5; i++) {
-			g.drawImage(smallCloudImg, SMALL_CLOUD_WIDTH * 4 * i - (int)(xLvlOffset * 0.7), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
+		for (int i = 0; i < 8; i++) {
+			g.drawImage(smallCloudImg, SMALL_CLOUD_WIDTH * 7 * i - (int) (xLvlOffset * 0.7), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
 		}
 	}
 
@@ -204,7 +225,7 @@ public class Playing extends State implements Statemethods{
 				case KeyEvent.VK_W, KeyEvent.VK_SPACE:
 					player.setJump(true);
 					break;
-                case KeyEvent.VK_ESCAPE:
+				case KeyEvent.VK_ESCAPE:
 					paused = !paused;
 					break;
 			}

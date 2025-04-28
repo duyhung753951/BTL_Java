@@ -31,17 +31,17 @@ public class EnemyManager {
                 c.update(lvlData, player);
     }
 
-    public void draw(Graphics g, int xLvlOffset) {
-        drawCrabs(g, xLvlOffset);
+    public void draw(Graphics g, int xLvlOffset, int yLvlOffset) {
+        drawCrabs(g, xLvlOffset, yLvlOffset);
     }
 
-    private void drawCrabs(Graphics g, int xLvlOffset) {
+    private void drawCrabs(Graphics g, int xLvlOffset, int yLvlOffset) {
         for (Crabby c : crabbies)
             if (c.isActive()) {
-                g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], (int) c.getHitBox().x - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitBox().y - CRABBY_DRAWOFFSET_Y,
+                g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], (int) c.getHitBox().x - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitBox().y - CRABBY_DRAWOFFSET_Y - yLvlOffset,
                         CRABBY_WIDTH * c.flipW(), CRABBY_HEIGHT, null);
-				c.drawHitBox(g, xLvlOffset);
-				c.drawAttackBox(g, xLvlOffset);
+                c.drawHitBox(g, xLvlOffset, yLvlOffset);
+                c.drawAttackBox(g, xLvlOffset, yLvlOffset);
 
             }
 
