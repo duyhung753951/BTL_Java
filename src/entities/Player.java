@@ -72,6 +72,12 @@ public class Player extends Entity{
 		initAttackBox();
 	}
 
+	public void setSpawn(Point spawn) {
+		this.x = spawn.x;
+		this.y = spawn.y;
+		hitbox.x = x;
+		hitbox.y = y;
+	}
 	public void update() {
 		updateHealthBar();
 
@@ -109,7 +115,7 @@ public class Player extends Entity{
 		//Finn
 		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - xLvlOffset + flipX, (int)(hitbox.y - yDrawOffset) - yLvlOffset, 32*2 *flipW, 32*2, null);
 		//		drawHitBox(g, xLvlOffset, yLvlOffset);
-		drawAttackBox(g, xLvlOffset, yLvlOffset);
+//		drawAttackBox(g, xLvlOffset, yLvlOffset);
 		drawUI(g);
 	}
 
