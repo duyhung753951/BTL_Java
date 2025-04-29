@@ -1,8 +1,14 @@
 package utilz;
 
+import entities.Crabby;
 import main.Game;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import static utilz.Constants.EnemyConstants.CRABBY;
 
 public class HelpMethods {
     /**
@@ -30,12 +36,16 @@ public class HelpMethods {
      */
     public static boolean IsSolid(float x, float y, int[][] lvData){
         int maxWidth = lvData[0].length * Game.TILES_SIZE;
-
-        if (x < 0 || x >= maxWidth || y < 0 || y >= Game.GAME_HEIGHT)    // check x, y có vượt ngoài phạm vi game
+        int maxHeight = lvData.length * Game.TILES_SIZE;
+        if (x < 0 || x >= maxWidth || y < 0 || y >= maxHeight)    // check x, y có vượt ngoài phạm vi game
             return true;
 
         float xIndex = x / Game.TILES_SIZE;     // tọa độ x trong mảng level data
         float yIndex = y / Game.TILES_SIZE;     // tọa độ y
+
+        // Additional bounds check to avoid ArrayIndexOutOfBoundsException
+        if (yIndex >= lvData.length || xIndex >= lvData[0].length)
+            return true;
 
         int value = lvData[(int) yIndex][(int) xIndex]; // lấy giá trị
 
@@ -106,7 +116,10 @@ public class HelpMethods {
     }
 
     public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
-        return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+        if (xSpeed > 0)
+        return IsSolid(hitbox.x + hitbox.width+ xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+        else
+            return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
     }
 
     public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
@@ -138,4 +151,40 @@ public class HelpMethods {
             return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);
 
     }
+    public static int[][] GetLevelData(BufferedImage img){
+        int[][] lvData = new int[img.getHeight()][img.getWidth()];
+        for(int j = 0; j < img.getHeight(); j++){
+            for(int i = 0; i < img.getWidth(); i++){
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getRed();
+                if(value >= 48) value = 0;		// incase we have more than 48 red value (index that doesn't exist)
+                lvData[j][i] = value;
+            }
+        }
+        return lvData;
+    }
+    public static ArrayList<Crabby> GetCrabs(BufferedImage img){
+        ArrayList<Crabby> list = new ArrayList<>();
+        for(int j = 0; j < img.getHeight(); j++){
+            for(int i = 0; i < img.getWidth(); i++){
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if(value == CRABBY){
+                    list.add(new Crabby(i* Game.TILES_SIZE, j* Game.TILES_SIZE));
+                }
+            }
+        }
+        return list;
+    }
+    public static Point GetPlayerSpawn(BufferedImage img) {
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == 100)
+                    return new Point(i * Game.TILES_SIZE, j * Game.TILES_SIZE);
+            }
+        return new Point(1 * Game.TILES_SIZE, 1 * Game.TILES_SIZE);
+    }
+
 }

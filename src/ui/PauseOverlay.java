@@ -64,7 +64,6 @@ public class PauseOverlay {
 		menuB.draw(g);
 		unpauseB.draw(g);
 		replayB.draw(g);
-
 		audioOptions.draw(g);
 	}
 	
@@ -89,8 +88,11 @@ public class PauseOverlay {
 				Gamestate.state=Gamestate.MENU;
 			playing.unpauseGame();
 		}else if (isIn(e, replayB)) { 
-			if (replayB.isMousePressed()) 
-				System.out.println("REPLAY LEVEL !!");
+			if (replayB.isMousePressed()) {
+				playing.resetAll();
+				playing.unpauseGame();
+			}
+
 	    }else if (isIn(e, unpauseB)) { 
 			if (unpauseB.isMousePressed()) 
 			playing.unpauseGame();
