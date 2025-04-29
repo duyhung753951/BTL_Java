@@ -108,6 +108,21 @@ public class Constants {
 		public static final int CRABBY_DRAWOFFSET_X = (int) (26 * Game.SCALE);
 		public static final int CRABBY_DRAWOFFSET_Y = (int) (9 * Game.SCALE);
 
+		public static final int BOSS = 10;
+
+		public static final int BOSS_IDLE = 0;
+		public static final int BOSS_RUNNING = 1;
+		public static final int BOSS_ATTACK = 2;
+		public static final int BOSS_HIT = 3;
+		public static final int BOSS_DEAD = 4;
+		public static final int BOSS_WIDTH_DEFAULT = 250;
+		public static final int BOSS_HEIGHT_DEFAULT = 250;
+
+		public static final int BOSS_WIDTH = (int) (BOSS_WIDTH_DEFAULT * Game.SCALE);
+		public static final int BOSS_HEIGHT = (int) (BOSS_HEIGHT_DEFAULT * Game.SCALE);
+
+		public static final int BOSS_DRAWOFFSET_X = (int) (98 * Game.SCALE);
+		public static final int BOSS_DRAWOFFSET_Y = (int) (76 * Game.SCALE);
 
 		public static int GetSpriteAmount(int enemy_type, int enemy_state) {
 
@@ -125,8 +140,17 @@ public class Constants {
 						case DEAD:
 							return 5;
 					}
+				case BOSS: {
+					switch (enemy_state) {
+						case BOSS_IDLE, BOSS_RUNNING, BOSS_ATTACK:
+							return 8;
+						case BOSS_HIT:
+							return 3;
+						case BOSS_DEAD:
+							return 7;
+					}
+				}
 			}
-
 			return 0;
 
 		}
@@ -134,6 +158,8 @@ public class Constants {
 			switch (enemy_type) {
 				case CRABBY:
 					return 10;
+				case BOSS:
+					return 100;
 				default:
 					return 1;
 			}
@@ -143,6 +169,8 @@ public class Constants {
 			switch (enemy_type) {
 				case CRABBY:
 					return 10;
+				case BOSS:
+					return 30;
 				default:
 					return 0;
 			}

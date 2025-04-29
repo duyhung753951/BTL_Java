@@ -33,8 +33,8 @@ public class Playing extends State implements Statemethods{
 	/*
 	chia doi ranh gioi trai va phai 5:5 de giu nvat o giua man hinh
 	*/
-	private final int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
-	private final int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+	private final int leftBorder = (int) (0.4 * Game.GAME_WIDTH);
+	private final int rightBorder = (int) (0.6 * Game.GAME_WIDTH);
 	private  int maxLvlOffsetX ;		// maxTilesOffset theo pixel
 
 	private final int upBorder = (int) (0.3* Game.GAME_HEIGHT);
@@ -308,6 +308,11 @@ public class Playing extends State implements Statemethods{
 	public EnemyManager getEnemyManager(){
 		return enemyManager;
 	}
+	
+	public Game getGame() {
+		return game;
+	}
+	
 	public void setMaxLvlOffset(int xlvlOffset, int ylvlOffset){
 		this.maxLvlOffsetX = xlvlOffset;
 		this.maxLvlOffsetY = yLvlOffset;

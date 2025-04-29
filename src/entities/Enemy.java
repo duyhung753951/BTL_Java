@@ -120,7 +120,6 @@ public abstract class Enemy extends Entity {
             newState(HIT);
     }
 
-    // Changed the name from "checkEnemyHit" to checkPlayerHit
     protected void checkPlayerHit(Rectangle2D.Float attackBox, Player player) {
         if (attackBox.intersects(player.hitbox))
             player.changeHealth(-GetEnemyDmg(enemyType));

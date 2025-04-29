@@ -1,6 +1,7 @@
 package levels;
 
 
+import entities.Boss;
 import entities.Crabby;
 import main.Game;
 import utilz.LoadSave;
@@ -15,6 +16,7 @@ public class Level {
 	private int[][] lvlData;
 	private BufferedImage img ;
 	private ArrayList<Crabby> crabs;
+	private ArrayList<Boss> bosses;
 
 	private  int lvlTilesWide;		// chieu rong tiles cua level
 	private  int maxTilesOffset ;	// so luong tiles du ra man hinh (phan co the cuon)
@@ -47,6 +49,7 @@ public class Level {
 	}
 	private void createEnemies() {
 		crabs = GetCrabs(img);
+		bosses = GetBoss(img);
 	}
 
 	private void createLevelData() {
@@ -60,6 +63,10 @@ public class Level {
 
 	public ArrayList<Crabby> getCrabs() {
 		return crabs;
+	}
+
+	public ArrayList<Boss> getBosses() {
+		return bosses;
 	}
 
 	public Point getPlayerSpawn() {

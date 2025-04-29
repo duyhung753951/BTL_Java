@@ -1,5 +1,6 @@
 package utilz;
 
+import entities.Boss;
 import entities.Crabby;
 import main.Game;
 
@@ -8,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static utilz.Constants.EnemyConstants.BOSS;
 import static utilz.Constants.EnemyConstants.CRABBY;
 
 public class HelpMethods {
@@ -176,6 +178,21 @@ public class HelpMethods {
         }
         return list;
     }
+
+    public static ArrayList<Boss> GetBoss(BufferedImage img){
+        ArrayList<Boss> list = new ArrayList<>();
+        for(int j = 0; j < img.getHeight(); j++){
+            for(int i = 0; i < img.getWidth(); i++){
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if(value == BOSS){
+                    list.add(new Boss(i* Game.TILES_SIZE, j* Game.TILES_SIZE));
+                }
+            }
+        }
+        return list;
+    }
+
     public static Point GetPlayerSpawn(BufferedImage img) {
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
