@@ -17,7 +17,7 @@ public class LoadSave {
 
 	public static final String FINN_ATLAS = "Assets/Character/FinnSprites.png";
 	public static final String LEVEL_ATLAS = "Assets/Levels/outside_sprites.png";
-	public static final String LEVEL_1_DATA = "Assets/Levels/level_one_data_long.png";
+	public static final String LEVEL_1_DATA = "Assets/Levels/level_one_data.png";
 	public static final String MENU_BUTTONS = "Assets/Menu/button_atlas.png";
 	public static final String MENU_BACKGROUND = "Assets/Menu/menu_background.png";
 	public static final String PAUSE_BACKGROUND = "Assets/Menu/pause_menu.png";

@@ -11,13 +11,13 @@ public class LevelManager {
 	private Game game;
 	private BufferedImage[] levelSprite;
 	private Level levelOne;
-	
+
 	public LevelManager(Game game) {
 		this.game = game;
 		importOutsideSprites();
 		levelOne = new Level(LoadSave.GetLevelData());
 	}
-	
+
 	private void importOutsideSprites() {
 		BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
 		levelSprite = new BufferedImage[48];
@@ -27,25 +27,31 @@ public class LevelManager {
 				levelSprite[index] = img.getSubimage(i*32, j*32, 32, 32);
 			}
 		}
-		
+
 	}
 
-	public void draw(Graphics g, int xLvlOffset) {
-		
-		for(int j = 0; j < Game.TILES_IN_HEIGHT; j++) {
+	public void draw(Graphics g, int xLvlOffset, int yLvlOffset) {
+		// Calculate which tiles are visible on screen based on the offset
+		int firstTileY = yLvlOffset / Game.TILES_SIZE;
+		int lastTileY = firstTileY + Game.TILES_IN_HEIGHT + 1; // +1 to handle partial tiles
+
+		// Make sure we don't go out of bounds
+		lastTileY = Math.min(lastTileY, levelOne.getLvData().length);
+
+		for(int j = firstTileY; j < lastTileY; j++) {
 			for(int i = 0; i < levelOne.getLvData()[0].length; i++) {
 				int index = levelOne.getSpriteIndex(i, j);
-				g.drawImage(levelSprite[index], i*Game.TILES_SIZE - xLvlOffset, j*Game.TILES_SIZE, Game.TILES_SIZE, Game.TILES_SIZE, null);
+				g.drawImage(levelSprite[index], i*Game.TILES_SIZE - xLvlOffset, j*Game.TILES_SIZE - yLvlOffset, Game.TILES_SIZE, Game.TILES_SIZE, null);
 			}
 		}
 	}
-	
+
 	public void update() {
-		
+
 	}
 
 	public Level getCurrentLevel() {
 		return levelOne;
 	}
-	
+
 }
