@@ -24,7 +24,7 @@ public class Player extends Entity{
 	private int playerAction = IDLE;
 	private boolean moving = false, attacking = false;
 	private boolean left, up, right, down, jump;
-	private float playerSpeed = 1.2f;
+	private float playerSpeed = 2f;
 	private int[][] lvData;
 	private float xDrawOffset = 7 * Game.SCALE;
 	private float yDrawOffset = 8 * Game.SCALE;
@@ -32,7 +32,7 @@ public class Player extends Entity{
 	// Jumping / Gravity
 	private float airSpeed = 0f;
 	private float gravity = 0.05f * Game.SCALE;
-	private float jumpSpeed = -3f * Game.SCALE;
+	private float jumpSpeed = -3.5f * Game.SCALE;
 	private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
 	private boolean inAir = false;
 
@@ -111,11 +111,11 @@ public class Player extends Entity{
 	}
 
 
-	public void render(Graphics g, int lvlOffset) {
+	public void render(Graphics g, int xLvlOffset, int yLvlOffset) {
 		//Finn
-		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - lvlOffset + flipX, (int)(hitbox.y - yDrawOffset), 32*2 *flipW, 32*2, null);
-//		drawHitBox(g, lvOffset);
-		drawAttackBox(g, lvlOffset);
+		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - xLvlOffset + flipX, (int)(hitbox.y - yDrawOffset) - yLvlOffset, 32*2 *flipW, 32*2, null);
+		//		drawHitBox(g, xLvlOffset, yLvlOffset);
+		drawAttackBox(g, xLvlOffset, yLvlOffset);
 		drawUI(g);
 	}
 
@@ -291,9 +291,9 @@ public class Player extends Entity{
 		healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBarWidth);
 	}
 
-	private void drawAttackBox(Graphics g, int lvlOffsetX) {
+	private void drawAttackBox(Graphics g, int lvlOffsetX, int lvlOffsetY) {
 		g.setColor(Color.red);
-		g.drawRect((int) attackBox.x - lvlOffsetX, (int) attackBox.y, (int) attackBox.width, (int) attackBox.height);
+		g.drawRect((int) attackBox.x - lvlOffsetX, (int) attackBox.y - lvlOffsetY, (int) attackBox.width, (int) attackBox.height);
 
 	}
 
