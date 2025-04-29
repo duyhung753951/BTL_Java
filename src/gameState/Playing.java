@@ -12,6 +12,7 @@ import entities.Player;
 import levels.LevelManager;
 import main.Game;
 import ui.GameOverOverlay;
+import ui.LevelCompletedOverlay;
 import ui.PauseOverlay;
 import utilz.LoadSave;
 
@@ -25,30 +26,21 @@ public class Playing extends State implements Statemethods{
 	private boolean paused=false;
 	private PauseOverlay pauseOverlay;
 	private GameOverOverlay gameOverOverlay;
-
+	private LevelCompletedOverlay levelCompletedOverlay;
 	private int xLvlOffset;
-	private int yLvlOffset;
 	/*
 	chia doi ranh gioi trai va phai 5:5 de giu nvat o giua man hinh
 	*/
-	private final int leftBorder = (int) (0.3 * Game.GAME_WIDTH);
-	private final int rightBorder = (int) (0.7 * Game.GAME_WIDTH);
-	private final int lvlTilesWide = LoadSave.GetLevelData()[0].length;		// chieu rong tiles cua level
-	private final int maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;	// so luong tiles du ra man hinh (phan co the cuon)
-	private final int maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE;		// maxTilesOffset theo pixel
-
-	private final int upBorder = (int) (0.2* Game.GAME_HEIGHT);
-	private final int downBorder = (int) (0.6 * Game.GAME_HEIGHT);
-	private final int lvlTilesLength = LoadSave.GetLevelData().length;		// chieu dai tiles cua level
-	private final int maxTilesOffsetY = lvlTilesLength - Game.TILES_IN_HEIGHT;	// so luong tiles du ra man hinh (phan co the cuon)
-	private final int maxLvlOffsetY = maxTilesOffsetY * Game.TILES_SIZE;
-
+	private final int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
+	private final int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+	private  int maxLvlOffsetX ;		// maxTilesOffset theo pixel
 	private BufferedImage backgroundImg, bigCloudImg, smallCloudImg;
 	private int[] smallCloudsPos;
 	private Random rand = new Random();
 
 	private boolean gameOver;
 	private boolean playerDying;
+	private	boolean levelCompleted;
 	public Playing(Game game) {
 		super(game);
 		initClasses();
@@ -59,6 +51,19 @@ public class Playing extends State implements Statemethods{
 		for(int i = 0; i < smallCloudsPos.length; i++){
 			smallCloudsPos[i] = (int)(70 * Game.SCALE) + rand.nextInt((int) (100 * Game.SCALE));
 		}
+		calcLvlOffset();
+		loadStartLevel();
+	}
+	public void loadNextLevel(){
+		resetAll();
+		levelManager.loadNextLevel();
+	}
+	private void loadStartLevel() {
+	enemyManager.loadEnemies(levelManager.getCurrentLevel());
+	}
+
+	private void calcLvlOffset() {
+		maxLvlOffsetX=levelManager.getCurrentLevel().getLvlOffset();
 	}
 
 
@@ -69,6 +74,7 @@ public class Playing extends State implements Statemethods{
 		player.loadLvData(levelManager.getCurrentLevel().getLvData());
 		pauseOverlay=new PauseOverlay(this);
 		gameOverOverlay = new GameOverOverlay(this);
+		levelCompletedOverlay = new LevelCompletedOverlay(this);
 	}
 
 
@@ -88,6 +94,8 @@ public class Playing extends State implements Statemethods{
 
 		}else if (playerDying) {
 			player.update();
+		}else if(levelCompleted){
+			levelCompletedOverlay.update();
 		}
 
 
@@ -96,30 +104,17 @@ public class Playing extends State implements Statemethods{
 
 	private void checkCloseToBorder() {
 		int playerX = (int) player.getHitBox().x;
-		int playerY = (int) player.getHitBox().y;
-		int diffX = playerX - xLvlOffset; // vị trí hiện tại của player trên màn hình (luôn được đảm bảo nằm trong các border)
-		int diffY = playerY - yLvlOffset;
+		int diff = playerX - xLvlOffset; // vị trí hiện tại của player trên màn hình (luôn được đảm bảo nằm trong các border)
 
-		if (diffX > rightBorder) {
-			xLvlOffset += (diffX - rightBorder);
-		}else if (diffX < leftBorder) {
-			xLvlOffset += (diffX - leftBorder);
+		if (diff > rightBorder) {
+			xLvlOffset += (diff - rightBorder);
+		}else if (diff < leftBorder) {
+			xLvlOffset += (diff - leftBorder);
 		}
 		if(xLvlOffset > maxLvlOffsetX){
 			xLvlOffset = maxLvlOffsetX;
 		}else if(xLvlOffset < 0){
 			xLvlOffset = 0;
-		}
-
-		if(diffY > downBorder){
-			yLvlOffset += (diffY - downBorder);
-		}else if(diffY < upBorder){
-			yLvlOffset += (diffY - upBorder);
-		}
-		if(yLvlOffset > maxLvlOffsetY){
-			yLvlOffset = maxLvlOffsetY;
-		}else if(yLvlOffset < 0){
-			yLvlOffset = 0;
 		}
 	}
 
@@ -128,26 +123,26 @@ public class Playing extends State implements Statemethods{
 	public void draw(Graphics g) {
 		g.drawImage(backgroundImg,0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 		drawClouds(g);
-		levelManager.draw(g, xLvlOffset, yLvlOffset);
-		player.render(g, xLvlOffset, yLvlOffset);
-		enemyManager.draw(g, xLvlOffset, yLvlOffset);
+		levelManager.draw(g, xLvlOffset);
+		player.render(g, xLvlOffset);
+		enemyManager.draw(g, xLvlOffset);
 		if (paused) {
 			g.setColor(new Color(0, 0, 0, 150));
 			g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 			pauseOverlay.draw(g);
-		} else if (gameOver)
+		} else if (gameOver) {
 			gameOverOverlay.draw(g);
-
-
+		}else if (levelCompleted) {
+			levelCompletedOverlay.draw(g);
+		}
 	}
 
-	// EDITED
 	private void drawClouds(Graphics g) {
-		for (int i = 0; i < 5; i++) {
-			g.drawImage(bigCloudImg, i * BIG_CLOUD_WIDTH - (int) (xLvlOffset * 0.3), (int) (204 * SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+		for(int i = 0; i < 5; i++){
+			g.drawImage(bigCloudImg,0+i*BIG_CLOUD_WIDTH - (int)(xLvlOffset * 0.3),(int)(204 * SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
 		}
-		for (int i = 0; i < 8; i++) {
-			g.drawImage(smallCloudImg, SMALL_CLOUD_WIDTH * 7 * i - (int) (xLvlOffset * 0.7), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
+		for(int i = 0; i < 5; i++) {
+			g.drawImage(smallCloudImg, SMALL_CLOUD_WIDTH * 4 * i - (int)(xLvlOffset * 0.7), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
 		}
 	}
 
@@ -156,6 +151,7 @@ public class Playing extends State implements Statemethods{
 		playerDying = false;
 		gameOver = false;
 		paused = false;
+		levelCompleted = false;
 		player.resetAll();
 		enemyManager.resetAllEnemies();
 	}
@@ -182,10 +178,13 @@ public class Playing extends State implements Statemethods{
 		if (!gameOver) {
 			if (paused)
 				pauseOverlay.mousePressed(e);
-
+			else if(levelCompleted){
+				levelCompletedOverlay.mousePressed(e);
+			}
 		}else {
 			gameOverOverlay.mousePressed(e);
 		}
+
 	}
 
 
@@ -194,6 +193,9 @@ public class Playing extends State implements Statemethods{
 		if (!gameOver) {
 			if (paused)
 				pauseOverlay.mouseReleased(e);
+			else if(levelCompleted){
+				levelCompletedOverlay.mouseReleased(e);
+			}
 		}else {
 			gameOverOverlay.mouseReleased(e);
 		}
@@ -205,6 +207,9 @@ public class Playing extends State implements Statemethods{
 		if (!gameOver) {
 			if (paused)
 				pauseOverlay.mousedMoved(e);
+			else if(levelCompleted){
+				levelCompletedOverlay.mouseMoved(e);
+			}
 		}else {
 			gameOverOverlay.mouseMoved(e);
 		}
@@ -225,7 +230,7 @@ public class Playing extends State implements Statemethods{
 				case KeyEvent.VK_W, KeyEvent.VK_SPACE:
 					player.setJump(true);
 					break;
-				case KeyEvent.VK_ESCAPE:
+                case KeyEvent.VK_ESCAPE:
 					paused = !paused;
 					break;
 			}
@@ -264,6 +269,17 @@ public class Playing extends State implements Statemethods{
 	public void setPlayerDying(boolean playerDying) {
 		this.playerDying = playerDying;
 
+	}
+	public EnemyManager getEnemyManager(){
+		return enemyManager;
+	}
+	public void setMaxLvlOffset(int lvlOffset){
+		this.maxLvlOffsetX = lvlOffset;
+	}
+
+	// theem sua xoa
+	public void setLevelCompleted(boolean levelCompleted) {
+		this.levelCompleted = levelCompleted;
 	}
 
 }
