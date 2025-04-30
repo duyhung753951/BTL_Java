@@ -108,7 +108,7 @@ public class EnemyManager {
         int healthStartY = healthBarY + (bossHealthBarHeight - 12) / 2; // Căn giữa theo chiều dọc
 
         // Vẽ phần máu (màu đỏ)
-        g.setColor(new java.awt.Color(230, 30, 30));
+        g.setColor(new java.awt.Color(75, 0, 130));
         g.fillRect(healthStartX, healthStartY, healthFillWidth, 15); // Chiều cao của phần máu
         // Vẽ background của thanh máu
         g.drawImage(bossHealthBar, healthBarX, healthBarY, bossHealthBarWidth, bossHealthBarHeight, null);
