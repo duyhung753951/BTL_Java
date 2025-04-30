@@ -91,10 +91,10 @@ public class EnemyManager {
         // Calculate health bar position (centered above the boss)
         int bossHealthBarWidth = 350; // Điều chỉnh chiều rộng
         int bossHealthBarHeight = 80; // Điều chỉnh chiều cao
-        int bossHealthBarOffset = 15; // Khoảng cách từ boss đến thanh máu
+        int bossHealthBarOffset = 55; // Khoảng cách từ boss đến thanh máu
 
         int healthBarX = (int) (b.getHitBox().x - xLvlOffset - (int) (bossHealthBarWidth / 2) + (b.getHitBox().width / 2));
-        int healthBarY = (int) (b.getHitBox().y - yLvlOffset - BOSS_DRAWOFFSET_Y - bossHealthBarOffset);
+        int healthBarY = (int) (b.getHitBox().y - yLvlOffset - bossHealthBarOffset);
 
         // Tính toán phần trăm máu
         float healthPercentage = (float) b.getCurrentHealth() / b.getMaxHealth();
