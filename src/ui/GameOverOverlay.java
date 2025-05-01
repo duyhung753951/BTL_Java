@@ -81,12 +81,15 @@ public class GameOverOverlay {
         if (isIn(menu, e)) {
             if (menu.isMousePressed()) {
                 playing.resetAll();
-                Gamestate.state = Gamestate.MENU;
+               // Gamestate.state = Gamestate.MENU;
+                playing.setGamestate(Gamestate.MENU);
             }
         } else if (isIn(play, e))
-            if (play.isMousePressed())
+            if (play.isMousePressed()) {
                 playing.resetAll();
+                playing.getGame().getAudioPlayer().setLevelSong(playing.getLevelManager().getLevelIndex());
 
+            }
         menu.resetBools();
         play.resetBools();
     }

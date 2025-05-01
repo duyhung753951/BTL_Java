@@ -320,7 +320,13 @@ public class Playing extends State implements Statemethods{
 
 	// theem sua xoa
 	public void setLevelCompleted(boolean levelCompleted) {
-		this.levelCompleted = levelCompleted;
-	}
 
+		this.levelCompleted = levelCompleted;
+		if (levelCompleted){
+			game.getAudioPlayer().lvlCompleted();
+		}
+	}
+	public LevelManager getLevelManager() {
+		return levelManager;
+	}
 }

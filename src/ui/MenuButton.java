@@ -73,6 +73,9 @@ import static utilz.Constants.UI.Buttons.*;
 			
 			return bounds;
 		}
-		
-		
-}
+
+
+			public Gamestate getState() {
+			return state;
+			}
+		}

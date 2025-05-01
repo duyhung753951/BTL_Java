@@ -5,6 +5,7 @@ import java.awt.Menu;
 import java.net.URISyntaxException;
 
 
+import audio.AudioPlayer;
 import gameState.*;
 import ui.AudioOptions;
 import utilz.LoadSave;
@@ -21,7 +22,7 @@ public class Game implements Runnable{
 	private gameState.Menu menu;
 	private GameOptions gameOptions;
 	private AudioOptions audioOptions;
-	
+	private AudioPlayer audioPlayer ;
 	public static final int TILES_DEFAULT_SIZE = 32;
 	public final static float SCALE = 1.5f;
 	public final static int TILES_IN_WIDTH = 26;
@@ -42,7 +43,8 @@ public class Game implements Runnable{
 	}
 	
 	private void initClasses() {
-		audioOptions = new AudioOptions();
+		audioOptions = new AudioOptions(this);
+		audioPlayer= new AudioPlayer();
 		menu = new gameState.Menu(this);
 		playing = new Playing(this);
 		gameOptions = new GameOptions(this);
@@ -155,5 +157,7 @@ public class Game implements Runnable{
 	}
 	public AudioOptions getAudioOptions() {return audioOptions;}
 	public GameOptions getGameOptions() {return gameOptions;}
-	
+	public AudioPlayer getAudioPlayer() {
+		return audioPlayer;
+	}
 }

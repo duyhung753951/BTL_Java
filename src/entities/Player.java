@@ -5,6 +5,7 @@ import static utilz.Constants.EnemyConstants.DEAD;
 import static utilz.Constants.EnemyConstants.GetSpriteAmount;
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
+import audio.AudioPlayer;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -89,10 +90,13 @@ public class Player extends Entity{
 				playerAction = DEATH; // Đổi playerAction sang animation chết
 				aniTick = 0;
 				aniIndex = 0;
+				playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
 			} else {
 				// Nếu animation chết đã chơi xong
 				if (aniIndex >= getSpriteAmount(DEATH) - 1 && aniTick >= aniSpeed - 1) {
 					playing.setGameOver(true); // Thực sự GameOver
+					playing.getGame().getAudioPlayer().stopSong();
+					playing.getGame().getAudioPlayer().playEffect(AudioPlayer.GAMEOVER);
 				} else {
 					updateAnimationTick(); // Tiếp tục chơi animation chết
 				}
@@ -168,6 +172,7 @@ public class Player extends Entity{
 	private void jump() {
 		if(inAir)
 			return;
+		playing.getGame().getAudioPlayer().playEffect(AudioPlayer.JUMP);
 		inAir = true;
 		airSpeed = jumpSpeed;
 	}
@@ -275,6 +280,7 @@ public class Player extends Entity{
 			return;
 		attackChecked = true;
 		playing.checkEnemyHit(attackBox);
+		playing.getGame().getAudioPlayer().playAttackSound();
 
 	}
 
