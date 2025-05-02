@@ -36,8 +36,8 @@ public class LoadSave {
 	public static final String MENU_BACKGROUND_IMG = "Assets/Menu/menu_background_img1.jpg";
 	public static final String MENU_BACKGROUND_IMG2 = "Assets/Menu/menu_background_img.jpg";
 	public static final String COMPLETED_IMG = "Assets/Menu/completed_sprite.png";
-	public static final String BOSS_SPRITE = "Assets/Boss/boss_sprite.png";
-	public static final String BOSS_HEALTH_BAR = "Assets/Boss/boss_health_bar.png";
+	public static final String BOSS_SPRITE = "Assets/BOSS/boss_sprite.png";
+	public static final String BOSS_HEALTH_BAR = "Assets/BOSS/boss_health_bar.png";
 	public static final String ICON = "Assets/Menu/iconGame.png";
 
 	public static BufferedImage GetSpriteAtlas(String fileName) {
