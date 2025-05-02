@@ -5,6 +5,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import audio.AudioPlayer;
 import gameState.Playing;
 import levels.Level;
 import utilz.LoadSave;
@@ -45,7 +46,10 @@ public class EnemyManager {
             }
         }
         if(!isAnyActive){
-            playing.setLevelCompleted(true);
+           // playing.getGame().getAudioPlayer().playEffect(AudioPlayer.LVL_COMPLETED);
+            if (!playing.isLevelCompleted()) {
+                playing.setLevelCompleted(true);
+            }
         }
     }
 
@@ -175,4 +179,5 @@ public class EnemyManager {
         return (bossX < playing.getGame().GAME_WIDTH && bossX + BOSS_WIDTH > 0 &&
                 bossY < playing.getGame().GAME_HEIGHT && bossY + BOSS_HEIGHT > 0);
     }
+
 }

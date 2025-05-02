@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import audio.AudioPlayer;
 import entities.EnemyManager;
 import entities.Player;
 import levels.Level;
@@ -103,7 +104,6 @@ public class Playing extends State implements Statemethods{
 			// Kiểm tra nếu player rơi xuống vực (dưới cùng của map)
 			int playerY = (int)player.getHitBox().y;
 			int deathY = maxLvlOffsetY + Game.GAME_HEIGHT - Game.TILES_SIZE;
-	
 			if (playerY >= deathY) {
 				setPlayerDying(true);
 				setGameOver(true);
@@ -318,15 +318,16 @@ public class Playing extends State implements Statemethods{
 		this.maxLvlOffsetY = yLvlOffset;
 	}
 
-	// theem sua xoa
-	public void setLevelCompleted(boolean levelCompleted) {
 
+	public void setLevelCompleted(boolean levelCompleted) {
 		this.levelCompleted = levelCompleted;
-		if (levelCompleted){
+		if (levelCompleted)
 			game.getAudioPlayer().lvlCompleted();
-		}
 	}
 	public LevelManager getLevelManager() {
 		return levelManager;
+	}
+	public boolean isLevelCompleted(){
+		return levelCompleted;
 	}
 }
