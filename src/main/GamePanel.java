@@ -20,7 +20,6 @@ public class GamePanel extends JPanel{
 		
 		mouseInputs = new MouseInputs(this);
 		this.game = game;
-		
 		setPanelSize();
 		addKeyListener(new KeyBoardInputs(this));
 		addMouseListener(mouseInputs);
@@ -42,12 +41,6 @@ public class GamePanel extends JPanel{
 		super.paintComponent(g);
 		
 		game.render(g);
-		
-	}
-
-	public void updateGame() {
-		
-		
 		
 	}
 	

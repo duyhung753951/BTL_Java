@@ -66,8 +66,8 @@ public class HelpMethods {
         int currentTile = (int) (hitbox.x / Game.TILES_SIZE);
         if(xSpeed > 0){
             //Right
-            int tileXPos = currentTile * Game.TILES_SIZE;
-            int xOffset = (int)(Game.TILES_SIZE - hitbox.width);
+            int tileXPos = currentTile * Game.TILES_SIZE;   // tính vị trí X của cạnh trái của tile hiện tại
+            int xOffset = (int)(Game.TILES_SIZE - hitbox.width);    // tính khoảng trống cần thiết để hitbox không đè lên tường
             return tileXPos + xOffset - 1;              // trả lại tọa độ đặt hitbox sát trái tường bên phải
         }else{
             //Left
@@ -86,18 +86,18 @@ public class HelpMethods {
         int currentTile;
         if (airSpeed > 0) {
             // Falling - chạm đất (Floor)
-            currentTile = (int) ((hitbox.y + hitbox.height) / Game.TILES_SIZE);
+            currentTile = (int) ((hitbox.y + hitbox.height) / Game.TILES_SIZE);     // lấy ra vị trí ở dưới nhân vật
             int tileYPos = currentTile * Game.TILES_SIZE;
             int yOffset = (int) (hitbox.height);
-            if (IsSolid(hitbox.x, tileYPos, lvData) || IsSolid(hitbox.x + hitbox.width, tileYPos, lvData)) {
-                return tileYPos - yOffset - 1;
+            if (IsSolid(hitbox.x, tileYPos, lvData) || IsSolid(hitbox.x + hitbox.width, tileYPos, lvData)) {    // nếu chân trái/phải chạm đất
+                return tileYPos - yOffset - 1;      // trả về tọa độ ngay dưới chân nhân vật
             }
         } else {
             // Rising - chạm trần (Roof)
-            currentTile = (int) (hitbox.y / Game.TILES_SIZE);
+            currentTile = (int) (hitbox.y / Game.TILES_SIZE);       // lấy ra vị trí trên nhân vật
             int tileYPos = currentTile * Game.TILES_SIZE;
-            if (IsSolid(hitbox.x, tileYPos, lvData) || IsSolid(hitbox.x + hitbox.width, tileYPos, lvData)) {
-                return tileYPos + Game.TILES_SIZE;
+            if (IsSolid(hitbox.x, tileYPos, lvData) || IsSolid(hitbox.x + hitbox.width, tileYPos, lvData)) {    // nếu trên trái/phải chạm trần
+                return tileYPos + Game.TILES_SIZE;  // trả về tọa độ trên đầu nhân vật
             }
         }
         return hitbox.y;
@@ -115,13 +115,6 @@ public class HelpMethods {
             if(!IsSolid(hitbox.x + hitbox.width,hitbox.y + hitbox.height + 1, lvData))
                 return false;
         return true;
-    }
-
-    public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
-        if (xSpeed > 0)
-        return IsSolid(hitbox.x + hitbox.width+ xSpeed, hitbox.y + hitbox.height + 1, lvlData);
-        else
-            return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
     }
 
     public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
@@ -197,7 +190,7 @@ public class HelpMethods {
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
                 Color color = new Color(img.getRGB(i, j));
-                int value = color.getGreen();
+                int value = color.getBlue();
                 if (value == 100) {
                     return new Point(i * Game.TILES_SIZE, j * Game.TILES_SIZE);
                 }

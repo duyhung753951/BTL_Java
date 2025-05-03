@@ -86,7 +86,7 @@ public class Player extends Entity{
 		int deathY = playing.getYlvlOffset() + Game.GAME_HEIGHT - Game.TILES_SIZE;
 		System.out.println("Player Y: " + playerY);
 		System.out.println("Death Y: " + deathY);
-		if (playerY >= deathY && inAir) {
+		if (playerY >= deathY && inAir && airSpeed > 2) {
 			currentHealth = 0;
 		}
 
@@ -145,6 +145,9 @@ public class Player extends Entity{
 		if (jump)
 			jump();
 
+		if (lvData != null && !inAir && !IsEntityOnFloor(hitbox, lvData))
+			inAir = true;
+
 		if (!inAir)
 			if ((!left && !right) || (right && left))
 				return;
@@ -182,7 +185,8 @@ public class Player extends Entity{
 
 		} else
 			updateXPos(xSpeed);
-		moving = true;
+		if (left || right)
+			moving = true;
 	}
 
 	private void jump() {

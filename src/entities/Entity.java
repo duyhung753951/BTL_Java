@@ -25,10 +25,7 @@ public abstract class Entity {
 	protected void initHitBox(float x, float y, float width, float height) {
 		hitbox = new Rectangle2D.Float((int)x,(int)y,width,height);
 	}
-	//	public void updateHitBox() {
-//		hitbox.x = (int)x;
-//		hitbox.y = (int)y;
-//	}
+
 	public Rectangle2D.Float getHitBox() {
 		return hitbox;
 	}
