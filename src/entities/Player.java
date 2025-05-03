@@ -276,6 +276,10 @@ public class Player extends Entity{
 			aniTick = 0;
 		}
 	}
+		    
+		    public int getCurrentHealth() {
+		return currentHealth;
+		    }
 
 	public void resetDirBooleans() {
 		left = false;

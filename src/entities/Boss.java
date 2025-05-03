@@ -51,6 +51,10 @@ public class Boss extends Enemy{
     // Ghi đè phương thức canSeePlayer để sử dụng logic riêng cho Boss
     @Override
     protected boolean canSeePlayer(int[][] lvlData, Player player) {
+        if (player.getCurrentHealth() <= 0) {
+            return false;
+        }
+        
         // Sử dụng phạm vi Y rộng hơn cho Boss
         float yDifference = Math.abs(player.getHitBox().y - hitbox.y);
 
@@ -67,13 +71,19 @@ public class Boss extends Enemy{
     // Ghi đè phương thức isPlayerInRange cho Boss
     @Override
     protected boolean isPlayerInRange(Player player) {
+        if (player.getCurrentHealth() <= 0) {
+            return false;
+        }
         int absValue = (int) Math.abs(player.hitbox.x - hitbox.x);
         return absValue <= visionDistance;
     }
-
+    
     // Ghi đè phương thức isPlayerCloseForAttack cho Boss
     @Override
     protected boolean isPlayerCloseForAttack(Player player) {
+        if (player.getCurrentHealth() <= 0) {
+            return false;
+        }
         int absValue = (int) Math.abs(player.hitbox.x - hitbox.x);
         return absValue <= attackDistance * 1.5; // Tầm tấn công xa hơn một chút
     }
@@ -83,6 +93,12 @@ public class Boss extends Enemy{
         if (firstUpdate)
             firstUpdateCheck(lvlData);
 
+        // Kiểm tra nếu người chơi đã chết thì chuyển về trạng thái IDLE
+        if (player.getCurrentHealth() <= 0 && enemyState != BOSS_IDLE && !inAir) {
+            newState(BOSS_IDLE);
+            return;
+        }
+    
         if (inAir)
             updateInAir(lvlData);
         else {
@@ -95,13 +111,17 @@ public class Boss extends Enemy{
                     }
                     break;
                 case BOSS_RUNNING:
-                    if (canSeePlayer(lvlData, player)) {
+                    if (player.getCurrentHealth() <= 0) {
+                        newState(BOSS_IDLE);
+                    } else if (canSeePlayer(lvlData, player)) {
                         turnTowardsPlayer(player);
                         if (isPlayerCloseForAttack(player)) {
                             newState(BOSS_ATTACK);
                         }
+                        move(lvlData);
+                    } else {
+                        newState(BOSS_IDLE);
                     }
-                    move(lvlData);
                     break;
                 case BOSS_ATTACK:
                     if (aniIndex == 0)
@@ -112,9 +132,14 @@ public class Boss extends Enemy{
                         attackChecked = true;
                     }
 
-                    // Khi hoàn thành animation tấn công, quay lại RUNNING
+                    // Khi hoàn thành animation tấn công, kiểm tra trạng thái người chơi
                     if (aniIndex >= 7) {
-                        newState(BOSS_RUNNING);
+                        // Nếu người chơi đã bị tiêu diệt (health <= 0), chuyển sang trạng thái IDLE
+                        if (player.getCurrentHealth() <= 0) {
+                            newState(BOSS_IDLE);
+                        } else {
+                            newState(BOSS_RUNNING);
+                        }
                     }
                     break;
 
