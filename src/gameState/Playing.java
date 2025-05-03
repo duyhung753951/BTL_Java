@@ -83,7 +83,7 @@ public class Playing extends State implements Statemethods{
 	private void initClasses() {
 		levelManager = new LevelManager(game);
 		enemyManager = new EnemyManager(this);
-		player = new Player(200, 180, (int) (32*SCALE), (int) (32*SCALE), this);
+		player = new Player(100, 100, (int) (32*SCALE), (int) (32*SCALE), this);
 		player.loadLvData(levelManager.getCurrentLevel().getLvData());
 		player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
 		pauseOverlay=new PauseOverlay(this);
@@ -100,15 +100,7 @@ public class Playing extends State implements Statemethods{
 			player.update();
 			enemyManager.update(levelManager.getCurrentLevel().getLvData(), player);
 			checkCloseToBorder();
-			
-			// Kiểm tra nếu player rơi xuống vực (dưới cùng của map)
-			int playerY = (int)player.getHitBox().y;
-			int deathY = maxLvlOffsetY + Game.GAME_HEIGHT - Game.TILES_SIZE;
-			if (playerY >= deathY) {
-				setPlayerDying(true);
-				setGameOver(true);
 
-			}
 		}else {
 			pauseOverlay.update();
 		}
@@ -311,6 +303,14 @@ public class Playing extends State implements Statemethods{
 	
 	public Game getGame() {
 		return game;
+	}
+
+	public int getXlvlOffset() {
+		return xLvlOffset;
+	}
+
+	public int getYlvlOffset() {
+		return yLvlOffset;
 	}
 	
 	public void setMaxLvlOffset(int xlvlOffset, int ylvlOffset){

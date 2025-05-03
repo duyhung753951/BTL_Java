@@ -82,6 +82,14 @@ public class Player extends Entity{
 	public void update() {
 		updateHealthBar();
 
+		int playerY = (int)getHitBox().y;
+		int deathY = playing.getYlvlOffset() + Game.GAME_HEIGHT - Game.TILES_SIZE;
+		System.out.println("Player Y: " + playerY);
+		System.out.println("Death Y: " + deathY);
+		if (playerY >= deathY && inAir) {
+			currentHealth = 0;
+		}
+
 		if (currentHealth <= 0) {
 			playing.setPlayerDying(true); // Chỉ set dying, chưa game over liền
 
@@ -111,6 +119,7 @@ public class Player extends Entity{
 
 			return;
 		}
+
 
 		// Nếu chưa chết thì chơi bình thường
 		updateAttackBox();
