@@ -17,7 +17,7 @@ public class AudioPlayer {
     public static int MENU_1 = 0;
     public static int LEVEL_1 = 1;
     public static int LEVEL_2 = 2;
-
+    public static int LEVEL_3 = 3;
     public static int DIE = 0;
     public static int JUMP = 1;
     public static int GAMEOVER = 2;
@@ -86,10 +86,17 @@ public class AudioPlayer {
     }
 
     public void setLevelSong(int lvlIndex) {
-        if (lvlIndex % 2 == 0)
+        switch (lvlIndex) {
+        case 0:
             playSong(LEVEL_1);
-        else
+            break;
+        case 1:
             playSong(LEVEL_2);
+            break;
+        case 2:
+            playSong(LEVEL_3);
+            break;
+        }
     }
 
     public void lvlCompleted() {

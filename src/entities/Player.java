@@ -84,8 +84,6 @@ public class Player extends Entity{
 
 		int playerY = (int)getHitBox().y;
 		int deathY = playing.getYlvlOffset() + Game.GAME_HEIGHT - Game.TILES_SIZE;
-		System.out.println("Player Y: " + playerY);
-		System.out.println("Death Y: " + deathY);
 		if (playerY >= deathY && inAir && airSpeed > 2) {
 			currentHealth = 0;
 		}
