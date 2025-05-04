@@ -61,6 +61,7 @@ public class Playing extends State implements Statemethods{
 		}
 		calcLvlOffset();
 		loadStartLevel();
+		System.out.println("Level index: " + getLevelManager().getLevelIndex());
 	}
 	public void loadNextLevel(){
 		resetAll();
@@ -95,24 +96,25 @@ public class Playing extends State implements Statemethods{
 
 	@Override
 	public void update() {
-		if (!paused) {
-			levelManager.update();
-			player.update();
-			enemyManager.update(levelManager.getCurrentLevel().getLvData(), player);
-			checkCloseToBorder();
-
-		}else {
-			pauseOverlay.update();
+		if (paused || levelCompleted) {
+			if (paused)
+				pauseOverlay.update();
+			if (levelCompleted)
+				levelCompletedOverlay.update();
+			return;
 		}
-		if (gameOver) {
+
+		levelManager.update();
+		player.update();
+		enemyManager.update(levelManager.getCurrentLevel().getLvData(), player);
+		checkCloseToBorder();
+
+		if (gameOver)
 			gameOverOverlay.update();
-
-		}else if (playerDying) {
+		else if (playerDying)
 			player.update();
-		}else if(levelCompleted){
-			levelCompletedOverlay.update();
-		}
 	}
+
 
 	private void checkCloseToBorder() {
 		int playerX = (int) player.getHitBox().x;
@@ -246,7 +248,7 @@ public class Playing extends State implements Statemethods{
 	public void keyPressed(KeyEvent e) {
 		if (gameOver)
 			gameOverOverlay.keyPressed(e);
-		else
+		else if (!levelCompleted) {
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_A:
 					player.setLeft(true);
@@ -257,16 +259,18 @@ public class Playing extends State implements Statemethods{
 				case KeyEvent.VK_W, KeyEvent.VK_SPACE:
 					player.setJump(true);
 					break;
-                case KeyEvent.VK_ESCAPE:
+				case KeyEvent.VK_ESCAPE:
 					paused = !paused;
 					break;
 			}
+		}
 	}
+
 
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (!gameOver)
+		if (!gameOver && !levelCompleted)
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_A:
 					player.setLeft(false);
@@ -278,8 +282,8 @@ public class Playing extends State implements Statemethods{
 					player.setJump(false);
 					break;
 			}
-
 	}
+
 
 	public void mouseDragged(MouseEvent e) {
 		if (!gameOver)
@@ -300,7 +304,7 @@ public class Playing extends State implements Statemethods{
 	public EnemyManager getEnemyManager(){
 		return enemyManager;
 	}
-	
+
 	public Game getGame() {
 		return game;
 	}
@@ -312,7 +316,7 @@ public class Playing extends State implements Statemethods{
 	public int getYlvlOffset() {
 		return yLvlOffset;
 	}
-	
+
 	public void setMaxLvlOffset(int xlvlOffset, int ylvlOffset){
 		this.maxLvlOffsetX = xlvlOffset;
 		this.maxLvlOffsetY = yLvlOffset;

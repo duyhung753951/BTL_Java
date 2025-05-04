@@ -91,9 +91,8 @@ public class Player extends Entity{
 		if (currentHealth <= 0) {
 			playing.setPlayerDying(true); // Chỉ set dying, chưa game over liền
 
-			// Nếu chưa ở trạng thái DEATH animation
 			if (playerAction != DEATH) {
-				playerAction = DEATH; // Đổi playerAction sang animation chết
+				playerAction = DEATH;
 				aniTick = 0;
 				aniIndex = 0;
 				playing.getGame().getAudioPlayer().stopSong();
@@ -132,7 +131,7 @@ public class Player extends Entity{
 	public void render(Graphics g, int xLvlOffset, int yLvlOffset) {
 		//Finn
 		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - xLvlOffset + flipX, (int)(hitbox.y - yDrawOffset) - yLvlOffset, 32*2 *flipW, 32*2, null);
-		//		drawHitBox(g, xLvlOffset, yLvlOffset);
+//		drawHitBox(g, xLvlOffset, yLvlOffset);
 //		drawAttackBox(g, xLvlOffset, yLvlOffset);
 		drawUI(g);
 	}
@@ -147,11 +146,11 @@ public class Player extends Entity{
 			inAir = true;
 
 		if (!inAir)
-			if ((!left && !right) || (right && left))
+			if ((!left && !right) || (right && left))	// Nếu nhân vật không đang trên không và không di chuyển thì đứng im
 				return;
 
+		// Xử lý hình ảnh khi di chuyển trái phải (lật sprites)
 		float xSpeed = 0;
-
 		if (left) {
 			xSpeed -= playerSpeed;
 			flipX = width;
@@ -163,20 +162,16 @@ public class Player extends Entity{
 			flipW = 1;
 		}
 
-		if (!inAir)
-			if (!IsEntityOnFloor(hitbox, lvData))
-				inAir = true;
-
 		if (inAir) {
-			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvData)) {
+			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvData)) {	// Nếu có thể di chuyển
 				hitbox.y += airSpeed;
 				airSpeed += gravity;
 				updateXPos(xSpeed);
 			} else {
-				hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed, lvData);
-				if (airSpeed > 0)
+				hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed, lvData);	// Nếu va chạm
+				if (airSpeed > 0)	// Nếu đang rơi
 					resetInAir();
-				else
+				else		// Cài tốc độ rơi sau khi va chạm
 					airSpeed = fallSpeedAfterCollision;
 				updateXPos(xSpeed);
 			}
@@ -200,7 +195,7 @@ public class Player extends Entity{
 		airSpeed = 0;
 	}
 
-	private void updateXPos(float xSpeed) {
+	private void updateXPos(float xSpeed) {		// Di chuyển trái phải
 		if(CanMoveHere(hitbox.x+xSpeed, hitbox.y, hitbox.width, hitbox.height, lvData)){
 			hitbox.x += xSpeed;
 		}else{
@@ -275,7 +270,7 @@ public class Player extends Entity{
 		}
 	}
 		    
-		    public int getCurrentHealth() {
+	public int getCurrentHealth() {
 		return currentHealth;
 		    }
 
