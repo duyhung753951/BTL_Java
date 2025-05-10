@@ -30,6 +30,7 @@ public class Player extends Entity{
 	private float xDrawOffset = 7 * Game.SCALE;
 	private float yDrawOffset = 8 * Game.SCALE;
 	private int delay = -1;
+
 	// Jumping / Gravity
 	private float airSpeed = 0f;
 	private float gravity = 0.05f * Game.SCALE;
@@ -130,7 +131,8 @@ public class Player extends Entity{
 
 	public void render(Graphics g, int xLvlOffset, int yLvlOffset) {
 		//Finn
-		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - xLvlOffset + flipX, (int)(hitbox.y - yDrawOffset) - yLvlOffset, 32*2 *flipW, 32*2, null);
+		g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset) - xLvlOffset + flipX, (int)(hitbox.y - yDrawOffset) - yLvlOffset,
+				32*2 *flipW, 32*2, null);
 //		drawHitBox(g, xLvlOffset, yLvlOffset);
 //		drawAttackBox(g, xLvlOffset, yLvlOffset);
 		drawUI(g);
